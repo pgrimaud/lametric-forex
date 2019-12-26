@@ -2,7 +2,7 @@
 
 Show forex data on your LaMetric.
 
-insert GIT HERE
+![lametric-forex](https://user-images.githubusercontent.com/1866496/71490521-daf2a680-2833-11ea-9278-9ab49b481476.gif)
 
 Based on https://fcsapi.com/
 
