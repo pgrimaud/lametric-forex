@@ -77,7 +77,7 @@ class Api
         }
 
         return [
-            'price'  => $data['rates'][$pair]['price']
+            'price'  => $data['rates'][$pair]['rate']
         ];
     }
 
