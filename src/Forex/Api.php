@@ -60,8 +60,7 @@ class Api
             $this->data = $this->callApi($pair);
 
             // save to redis
-            $this->predisClient->set($redisKey, json_encode($this->data));
-            $this->predisClient->expireat($redisKey, strtotime("+5 minutes"));
+            $this->predisClient->set($redisKey, json_encode($this->data), 60 * 60 * 3);
         } else {
             $this->data = json_decode($launchesFile, true);
         }
