@@ -17,7 +17,7 @@ try {
     $validator = new Validator($_GET);
     $validator->check();
 
-    $api = new Api(new GuzzleClient(), new PredisClient(), $config['api_key']);
+    $api = new Api(new GuzzleClient(), new PredisClient());
     $api->fetchData($validator->getPair());
 
     echo $response->data($api->getData(), $validator);

@@ -28,20 +28,13 @@ class Api
     private array $data;
 
     /**
-     * @var string
-     */
-    private string $apiKey;
-
-    /**
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
-     * @param string $apiKey
      */
-    public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient, string $apiKey)
+    public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient)
     {
         $this->guzzleClient = $guzzleClient;
         $this->predisClient = $predisClient;
-        $this->apiKey       = $apiKey;
     }
 
     /**
