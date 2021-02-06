@@ -10,7 +10,7 @@ use Predis\Client as PredisClient;
 
 class Api
 {
-    const DATA_ENDPOINT = 'https://www.freeforexapi.com/api/live?pairs=';
+    const DATA_ENDPOINT = 'https://www.freeforexapi.com/api/live';
 
     /**
      * @var GuzzleClient
@@ -53,7 +53,7 @@ class Api
             $this->data = $this->callApi($pair);
 
             // save to redis
-            $this->predisClient->set($redisKey, json_encode($this->data), 60 * 60 * 3);
+            $this->predisClient->set($redisKey, json_encode($this->data), 60 * 5);
         } else {
             $this->data = json_decode($launchesFile, true);
         }
@@ -72,12 +72,12 @@ class Api
         $resource = $this->guzzleClient->request('GET', $endpoint);
         $data     = json_decode((string)$resource->getBody(), true);
 
-        if (!$data['status']) {
+        if ($data['code'] !== 200) {
             throw new InvalidArgumentException('Invalid pair');
         }
 
         return [
-            'price'  => $data['ratest'][$pair]['price']
+            'price'  => $data['rates'][$pair]['price']
         ];
     }
 
