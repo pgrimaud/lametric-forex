@@ -10,7 +10,7 @@ use Predis\Client as PredisClient;
 
 class Api
 {
-    const DATA_ENDPOINT = 'https://fcsapi.com/api/forex/latest';
+    const DATA_ENDPOINT = 'https://fcsapi.com/api-v3/forex/latest';
 
     /**
      * @var GuzzleClient
