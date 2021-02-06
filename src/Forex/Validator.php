@@ -24,6 +24,11 @@ class Validator
     private string $pair;
 
     /**
+     * @var string
+     */
+    private string $pairFormatted;
+
+    /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
@@ -42,7 +47,8 @@ class Validator
             }
         }
 
-        $this->pair = addslashes($this->parameters['currency-1']) . addslashes($this->parameters['currency-2']);
+        $this->pair          = addslashes($this->parameters['currency-1']) . addslashes($this->parameters['currency-2']);
+        $this->pairFormatted = addslashes($this->parameters['currency-1']) . '/' . addslashes($this->parameters['currency-2']);
     }
 
     /**
@@ -51,5 +57,13 @@ class Validator
     public function getPair(): string
     {
         return strtoupper($this->pair);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPairFormatted(): string
+    {
+        return strtoupper($this->pairFormatted);
     }
 }

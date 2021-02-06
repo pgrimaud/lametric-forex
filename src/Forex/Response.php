@@ -46,7 +46,7 @@ class Response
             [
                 'icon'  => null,
                 'index' => 0,
-                'text'  => $validator->getPair(),
+                'text'  => $validator->getPairFormatted(),
             ],
             [
                 'icon'  => null,

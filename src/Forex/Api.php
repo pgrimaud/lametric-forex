@@ -53,7 +53,8 @@ class Api
             $this->data = $this->callApi($pair);
 
             // save to redis
-            $this->predisClient->set($redisKey, json_encode($this->data), 60 * 5);
+            $this->predisClient->set($redisKey, json_encode($this->data));
+            $this->predisClient->expire($redisKey, 60 * 5);
         } else {
             $this->data = json_decode($launchesFile, true);
         }
@@ -72,7 +73,7 @@ class Api
         $resource = $this->guzzleClient->request('GET', $endpoint);
         $data     = json_decode((string)$resource->getBody(), true);
 
-        if ($data['code'] !== 200) {
+        if ((int)$data['code'] !== 200) {
             throw new InvalidArgumentException('Invalid pair');
         }
 

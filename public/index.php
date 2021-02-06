@@ -27,4 +27,3 @@ try {
 } catch (GuzzleException $exception) {
     echo $response->error();
 }
-
