@@ -17,17 +17,17 @@ class Validator
     /**
      * @var array
      */
-    private $parameters;
+    private array $parameters;
 
     /**
      * @var string
      */
-    private $pair;
+    private string $pair;
 
     /**
      * @var bool
      */
-    private $showChange;
+    private bool $showChange;
 
     /**
      * @param array $parameters

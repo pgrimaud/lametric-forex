@@ -15,22 +15,22 @@ class Api
     /**
      * @var GuzzleClient
      */
-    private $guzzleClient;
+    private GuzzleClient $guzzleClient;
 
     /**
      * @var PredisClient
      */
-    private $predisClient;
+    private PredisClient $predisClient;
 
     /**
      * @var array
      */
-    private $data;
+    private array $data;
 
     /**
      * @var string
      */
-    private $apiKey;
+    private string $apiKey;
 
     /**
      * @param GuzzleClient $guzzleClient
@@ -49,7 +49,7 @@ class Api
      *
      * @throws InvalidArgumentException
      */
-    public function fetchData(string $pair)
+    public function fetchData(string $pair): void
     {
         $redisKey = 'lametric:forex-' . $pair;
 
