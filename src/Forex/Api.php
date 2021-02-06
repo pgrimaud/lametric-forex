@@ -10,7 +10,7 @@ use Predis\Client as PredisClient;
 
 class Api
 {
-    const DATA_ENDPOINT = 'https://fcsapi.com/api-v3/forex/latest';
+    const DATA_ENDPOINT = 'https://www.freeforexapi.com/api/live?pairs=';
 
     /**
      * @var GuzzleClient
@@ -84,8 +84,7 @@ class Api
         }
 
         return [
-            'price'  => $data['response'][0]['price'],
-            'change' => $data['response'][0]['chg_per'],
+            'price'  => $data['ratest'][$pair]['price']
         ];
     }
 
@@ -104,6 +103,6 @@ class Api
      */
     private function generateApiUrl(string $pair): string
     {
-        return self::DATA_ENDPOINT . '?symbol=' . $pair . '&access_key=' . $this->apiKey;
+        return self::DATA_ENDPOINT . '?pairs=' . $pair;
     }
 }

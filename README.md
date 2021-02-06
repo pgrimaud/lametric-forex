@@ -4,7 +4,7 @@ Show forex data on your LaMetric.
 
 ![lametric-forex](https://user-images.githubusercontent.com/1866496/71490521-daf2a680-2833-11ea-9278-9ab49b481476.gif)
 
-Based on https://fcsapi.com/
+Many thanks & Based on [Free Forex API](https://www.freeforexapi.com/) ❤️
 
 ## Feedback
 

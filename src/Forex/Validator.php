@@ -11,7 +11,6 @@ class Validator
     const MANDATORY_PARAMETERS = [
         'currency-1',
         'currency-2',
-        'change',
     ];
 
     /**
@@ -23,11 +22,6 @@ class Validator
      * @var string
      */
     private string $pair;
-
-    /**
-     * @var bool
-     */
-    private bool $showChange;
 
     /**
      * @param array $parameters
@@ -48,9 +42,7 @@ class Validator
             }
         }
 
-        $this->pair = addslashes($this->parameters['currency-1']) . '/' . addslashes($this->parameters['currency-2']);
-
-        $this->showChange = (bool)$this->parameters['change'];
+        $this->pair = addslashes($this->parameters['currency-1']) . addslashes($this->parameters['currency-2']);
     }
 
     /**
@@ -58,14 +50,6 @@ class Validator
      */
     public function getPair(): string
     {
-        return $this->pair;
-    }
-
-    /**
-     * @return bool
-     */
-    public function showChange(): bool
-    {
-        return $this->showChange;
+        return strtoupper($this->pair);
     }
 }

@@ -55,14 +55,6 @@ class Response
             ],
         ];
 
-        if ($validator->showChange()) {
-            $frames[] = [
-                'icon'  => null,
-                'index' => 2,
-                'text'  => $data['change'],
-            ];
-        }
-
         return $this->asJson([
             'frames' => $frames,
         ]);
