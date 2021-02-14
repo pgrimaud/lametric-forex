@@ -44,7 +44,7 @@ class Api
      */
     public function fetchData(string $pair): void
     {
-        $redisKey = 'lametric:forex-' . $pair;
+        $redisKey = 'lametric:forex-' . strtolower($pair);
 
         $launchesFile = $this->predisClient->get($redisKey);
         $ttl          = $this->predisClient->ttl($redisKey);
