@@ -71,14 +71,14 @@ class Api
         $endpoint = $this->generateApiUrl($pair);
 
         $resource = $this->guzzleClient->request('GET', $endpoint);
-        $data     = json_decode((string)$resource->getBody(), true);
+        $data     = json_decode((string) $resource->getBody(), true);
 
-        if ((int)$data['code'] !== 200) {
+        if ((int) $data['code'] !== 200) {
             throw new InvalidArgumentException('Invalid pair');
         }
 
         return [
-            'price'  => $data['rates'][$pair]['rate']
+            'price' => isset($data['rates'][$pair]['rate']) ?? ['price' => 0],
         ];
     }
 
