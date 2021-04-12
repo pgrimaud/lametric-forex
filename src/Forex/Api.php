@@ -78,7 +78,7 @@ class Api
         }
 
         return [
-            'price' => isset($data['rates'][$pair]['rate']) ?? ['price' => 0],
+            'price' => $data['rates'][$pair]['rate'] ?? ['price' => 0],
         ];
     }
 
