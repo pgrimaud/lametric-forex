@@ -72,7 +72,7 @@ class Api
                 $newPairCompare = $this->callApi('USD' . $validator->getCurrency1(), $validator);
 
                 return [
-                    'price' => ($newPairBase['price'] / $newPairCompare['price']),
+                    'price' => round($newPairBase['price'] / $newPairCompare['price'], 2),
                 ];
             }
 
