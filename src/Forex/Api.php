@@ -13,16 +13,6 @@ class Api
     const DATA_ENDPOINT = 'https://www.freeforexapi.com/api/live';
 
     /**
-     * @var GuzzleClient
-     */
-    private GuzzleClient $guzzleClient;
-
-    /**
-     * @var PredisClient
-     */
-    private PredisClient $predisClient;
-
-    /**
      * @var array
      */
     private array $data;
@@ -31,26 +21,24 @@ class Api
      * @param GuzzleClient $guzzleClient
      * @param PredisClient $predisClient
      */
-    public function __construct(GuzzleClient $guzzleClient, PredisClient $predisClient)
+    public function __construct(private GuzzleClient $guzzleClient, private PredisClient $predisClient)
     {
-        $this->guzzleClient = $guzzleClient;
-        $this->predisClient = $predisClient;
     }
 
     /**
-     * @param string $pair
+     * @param Validator $validator
      *
      * @throws InvalidArgumentException
      */
-    public function fetchData(string $pair): void
+    public function fetchData(Validator $validator): void
     {
-        $redisKey = 'lametric:forex-' . strtolower($pair);
+        $redisKey = 'lametric:forex-' . strtolower($validator->getPair());
 
         $launchesFile = $this->predisClient->get($redisKey);
         $ttl          = $this->predisClient->ttl($redisKey);
 
         if (!$launchesFile || $ttl < 0) {
-            $this->data = $this->callApi($pair);
+            $this->data = $this->callApi($validator->getPair(), $validator);
 
             // save to redis
             $this->predisClient->set($redisKey, json_encode($this->data));
@@ -61,12 +49,15 @@ class Api
     }
 
     /**
-     * @param string $pair
+     * @param string    $pair
+     * @param Validator $validator
+     *
      * @return array
      *
      * @throws InvalidArgumentException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function callApi(string $pair): array
+    private function callApi(string $pair, Validator $validator): array
     {
         $endpoint = $this->generateApiUrl($pair);
 
@@ -74,6 +65,17 @@ class Api
         $data     = json_decode((string) $resource->getBody(), true);
 
         if ((int) $data['code'] !== 200) {
+
+            // all pairs are USD, so let's try USD => CURRENCY1 => CURRENCY2
+            if ($validator->getCurrency1() !== 'USD') {
+                $newPairBase    = $this->callApi('USD' . $validator->getCurrency2(), $validator);
+                $newPairCompare = $this->callApi('USD' . $validator->getCurrency1(), $validator);
+
+                return [
+                    'price' => ($newPairBase['price'] / $newPairCompare['price']),
+                ];
+            }
+
             throw new InvalidArgumentException('Invalid pair');
         }
 

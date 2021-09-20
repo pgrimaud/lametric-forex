@@ -14,9 +14,14 @@ class Validator
     ];
 
     /**
-     * @var array
+     * @var string
      */
-    private array $parameters;
+    private string $currency1;
+
+    /**
+     * @var string
+     */
+    private string $currency2;
 
     /**
      * @var string
@@ -31,9 +36,8 @@ class Validator
     /**
      * @param array $parameters
      */
-    public function __construct(array $parameters = [])
+    public function __construct(private array $parameters = [])
     {
-        $this->parameters = $parameters;
     }
 
     /**
@@ -49,6 +53,8 @@ class Validator
 
         $this->pair          = addslashes($this->parameters['currency-1']) . addslashes($this->parameters['currency-2']);
         $this->pairFormatted = addslashes($this->parameters['currency-1']) . '/' . addslashes($this->parameters['currency-2']);
+        $this->currency1     = addslashes($this->parameters['currency-1']);
+        $this->currency2     = addslashes($this->parameters['currency-2']);
     }
 
     /**
@@ -65,5 +71,21 @@ class Validator
     public function getPairFormatted(): string
     {
         return strtoupper($this->pairFormatted);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency1(): string
+    {
+        return $this->currency1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency2(): string
+    {
+        return $this->currency2;
     }
 }

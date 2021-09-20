@@ -18,7 +18,7 @@ try {
     $validator->check();
 
     $api = new Api(new GuzzleClient(), new PredisClient());
-    $api->fetchData($validator->getPair());
+    $api->fetchData($validator);
 
     echo $response->data($api->getData(), $validator);
 

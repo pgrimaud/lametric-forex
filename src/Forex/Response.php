@@ -21,7 +21,7 @@ class Response
      *
      * @return string
      */
-    public function error($value = 'INTERNAL ERROR'): string
+    public function error(string $value = 'INTERNAL ERROR'): string
     {
         return $this->asJson([
             'frames' => [
