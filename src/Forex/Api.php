@@ -35,7 +35,7 @@ class Api
         $redisKey = 'lametric:forex-' . strtolower($validator->getPair());
 
         $launchesFile = $this->predisClient->get($redisKey);
-        $ttl          = $this->predisClient->ttl($redisKey);
+        $ttl = $this->predisClient->ttl($redisKey);
 
         if (!$launchesFile || $ttl < 0) {
             $this->data = $this->callApi($validator->getPair(), $validator);
@@ -49,7 +49,7 @@ class Api
     }
 
     /**
-     * @param string    $pair
+     * @param string $pair
      * @param Validator $validator
      *
      * @return array
@@ -62,17 +62,19 @@ class Api
         $endpoint = $this->generateApiUrl($pair);
 
         $resource = $this->guzzleClient->request('GET', $endpoint);
-        $data     = json_decode((string) $resource->getBody(), true);
+        $data = json_decode((string)$resource->getBody(), true);
 
-        if ((int) $data['code'] !== 200) {
+        if ((int)$data['code'] !== 200) {
 
             // all pairs are USD, so let's try USD => CURRENCY1 => CURRENCY2
             if ($validator->getCurrency1() !== 'USD') {
-                $newPairBase    = $this->callApi('USD' . $validator->getCurrency2(), $validator);
+                $newPairBase = $this->callApi('USD' . $validator->getCurrency2(), $validator);
                 $newPairCompare = $this->callApi('USD' . $validator->getCurrency1(), $validator);
 
+                $newPairBaseFixed = $newPairBase['price']['price'] ?? $newPairBase['price'];
+
                 return [
-                    'price' => round($newPairBase['price'] / $newPairCompare['price'], 2),
+                    'price' => round($newPairBaseFixed / $newPairCompare['price'], 2),
                 ];
             }
 
