@@ -11,6 +11,8 @@ $config = include_once __DIR__ . '/../config/parameters.php';
 
 Sentry\init(['dsn' => $config['sentry_key']]);
 
+header('Content-Type: application/json');
+
 $response = new Response();
 
 try {

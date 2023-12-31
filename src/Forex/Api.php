@@ -10,7 +10,7 @@ use Predis\Client as PredisClient;
 
 class Api
 {
-    const DATA_ENDPOINT = 'https://www.freeforexapi.com/api/live';
+    const DATA_ENDPOINT = 'https://open.er-api.com/v6/latest/USD';
 
     /**
      * @var array
@@ -42,7 +42,7 @@ class Api
 
             // save to redis
             $this->predisClient->set($redisKey, json_encode($this->data));
-            $this->predisClient->expire($redisKey, 60 * 5);
+            $this->predisClient->expire($redisKey, 3600);
         } else {
             $this->data = json_decode($launchesFile, true);
         }
@@ -64,25 +64,14 @@ class Api
         $resource = $this->guzzleClient->request('GET', $endpoint);
         $data = json_decode((string)$resource->getBody(), true);
 
-        if ((int)$data['code'] !== 200) {
+        $rates = $data['rates'];
 
-            // all pairs are USD, so let's try USD => CURRENCY1 => CURRENCY2
-            if ($validator->getCurrency1() !== 'USD') {
-                $newPairBase = $this->callApi('USD' . $validator->getCurrency2(), $validator);
-                $newPairCompare = $this->callApi('USD' . $validator->getCurrency1(), $validator);
-
-                $newPairBaseFixed = $newPairBase['price']['price'] ?? $newPairBase['price'];
-
-                return [
-                    'price' => round($newPairBaseFixed / $newPairCompare['price'], 2),
-                ];
-            }
-
-            throw new InvalidArgumentException('Invalid pair');
+        if(!isset($rates[$validator->getCurrency1()]) || !isset($rates[$validator->getCurrency2()])){
+           throw new InvalidArgumentException('Invalid pair');
         }
 
         return [
-            'price' => $data['rates'][$pair]['rate'] ?? ['price' => 0],
+            'price' => round($rates[$validator->getCurrency2()] / $rates[$validator->getCurrency1()], 2)
         ];
     }
 
